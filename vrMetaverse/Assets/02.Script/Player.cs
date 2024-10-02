@@ -5,7 +5,6 @@ using UnityEngine;
 using Photon.Pun;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class Player : MonoBehaviour
 {
@@ -24,6 +23,9 @@ public class Player : MonoBehaviour
     Transform xrRight;
 
     PhotonView pv;
+
+    public Animator animatorL;
+    public Animator animatorR;
 
     private void Start()
     {
@@ -44,6 +46,26 @@ public class Player : MonoBehaviour
         }
     }
 
+    void SetAnimation(InputDevice input, Animator animator)
+    {
+        if(input.TryGetFeatureValue(CommonUsages.trigger,out float t))
+        {
+            animator.SetFloat("Trigger", t);
+        }
+        else
+        {
+            animator.SetFloat("Trigger", 0);
+        }
+        if (input.TryGetFeatureValue(CommonUsages.grip, out float g))
+        {
+            animator.SetFloat("Grip", g);
+        }
+        else
+        {
+            animator.SetFloat("Grip", 0);
+        }
+    }
+
     private void CopyTransform(Transform t, Transform s)
     {
         t.position = s.position;
@@ -57,6 +79,9 @@ public class Player : MonoBehaviour
             CopyTransform(playerHead, xrHead);
             CopyTransform(playerLeft, xrLeft);
             CopyTransform(playerRight, xrRight);
+
+            SetAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand),animatorL);
+            SetAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), animatorR);
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Room
@@ -17,6 +18,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public List<Room> listRoom;
     public GameObject roomUI;
 
+    public InputField NickName;
     void Start()
     {
         //ServerConnect();
@@ -45,6 +47,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
+
+        PhotonNetwork.LocalPlayer.NickName = NickName.text;
         roomUI.SetActive(true);
     }
 
